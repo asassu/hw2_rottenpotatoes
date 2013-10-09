@@ -3,6 +3,10 @@ module MoviesHelper
   def oddness(count)
     count.odd? ?  "odd" :  "even"
   end
+
+ def ratingsInclude(ratingName)
+    @checked_ratings.include?(ratingName) ? true : false
+  end
   
   def createParamsArray(sortColumn)
     @paramsArray = Hash.new

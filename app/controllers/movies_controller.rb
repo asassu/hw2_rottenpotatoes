@@ -7,8 +7,10 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = ['G','PG','PG- 13', 'R']
     
     needToRedirect = false
+    
     if params[:sort_by] == nil
       if session[:sort_by] != nil
         @sorted_field = session[:sort_by].to_s
@@ -16,6 +18,19 @@ class MoviesController < ApplicationController
       end
     else
       @sorted_field = params[:sort_by].to_s
+    end
+    
+    if params[:ratings] == nil
+      if session[:ratings] != nil
+        @checked_ratings_hash = session[:ratings]
+        needToRedirect = true 
+      end
+    else
+      @checked_ratings_hash = params[:ratings]
+    end
+    
+    if @checked_ratings_hash != nil 
+      session.merge!({ :ratings => @checked_ratings_hash })
     end
     
     if @sorted_field != nil
@@ -29,7 +44,9 @@ class MoviesController < ApplicationController
       redirect_to movies_path(newParams)
     end
     
-    @movies = Movie.all(:order => @sorted_field)
+    @checked_ratings = @checked_ratings_hash != nil ? @checked_ratings_hash.keys : []
+    @search_ratings = @checked_ratings.empty?() ? @all_ratings : @checked_ratings
+    @movies = Movie.find_all_by_rating(@search_ratings, :order => @sorted_field)
     @highlight = @sorted_field
     
   end
