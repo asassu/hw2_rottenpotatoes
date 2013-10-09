@@ -4,10 +4,6 @@ module MoviesHelper
     count.odd? ?  "odd" :  "even"
   end
   
-  def ratingsInclude(ratingName)
-    @checked_ratings.include?(ratingName) ? true : false
-  end
-  
   def createParamsArray(sortColumn)
     @paramsArray = Hash.new
     @paramsArray.merge!({:ratings => @checked_ratings_hash})

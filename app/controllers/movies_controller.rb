@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-
+    
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -7,8 +7,8 @@ class MoviesController < ApplicationController
   end
 
   def index
-
-   needToRedirect = false
+    
+    needToRedirect = false
     if params[:sort_by] == nil
       if session[:sort_by] != nil
         @sorted_field = session[:sort_by].to_s
@@ -17,20 +17,21 @@ class MoviesController < ApplicationController
     else
       @sorted_field = params[:sort_by].to_s
     end
-
+    
     if @sorted_field != nil
       session.merge!({ :sort_by => @sorted_field })
     end 
-
+    
     if needToRedirect == true
       newParams = Hash.new
       newParams.merge!({ :ratings => @checked_ratings_hash })
       newParams.merge!({ :sort_by => @sorted_field })
       redirect_to movies_path(newParams)
     end
-
-	@movies = Movie.find_all_by_rating(@search_ratings, :order => @sorted_field)
-	@highlight = @sorted_field
+    
+    @movies = Movie.all(:order => @sorted_field)
+    @highlight = @sorted_field
+    
   end
 
   def new
