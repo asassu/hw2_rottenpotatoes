@@ -45,12 +45,10 @@ class MoviesController < ApplicationController
     
     @checked_ratings = @checked_ratings_hash != nil ? @checked_ratings_hash.keys : []
     @search_ratings = @checked_ratings.empty?() ? @all_ratings : @checked_ratings
-
     @movies = Movie.find_all_by_rating(@search_ratings, :order => @sorted_field)
     @highlight = @sorted_field
     
   end
-
 
   def new
     # default: render 'new' template
