@@ -4,7 +4,4 @@ module MoviesHelper
     count.odd? ?  "odd" :  "even"
   end
 
-  def self.ratings
-    self.select("DISTINCT(rating)").map(&:rating)
-  end
 end

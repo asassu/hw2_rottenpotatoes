@@ -3,11 +3,14 @@
 
 = form_tag movies_path, :method => :get do
   Include: 
-  - @all_ratings.each do |rating|
-    = rating
-    = check_box_tag "ratings[#{rating}]", 1, session[:ratings].include?(rating)  # add a checkbox
-  = hidden_field_tag 'sort_by', @sorted_field
+  - @all_ratings.each do |rating| #For each rating defined in the SQL database (made a variable in movies_controller)
+    = rating #print out the rating value (G, PG, etc)
+    = check_box_tag "ratings[#{rating}]", 1, session[:ratings].include?(rating) #print a checkbox(session added for remembering page refresh)
+    -#Note: check_box_tag(name, value = "1", checked = false, options = {}) public
   = submit_tag 'Refresh Sort', :id => "ratings_submit"
+
+  -#Note: params hash contains all the input sent in by the user
+  #It is the job of the controller to respond to these requests (dynamically calls onto page)
 
 %table#movies
   %thead
