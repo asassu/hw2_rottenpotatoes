@@ -6,10 +6,9 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-
+#Note: code condensing accomplished in major part with the help of Will Farmer
   def index
-    #Make SQL query to get all possible ratings
-    @all_ratings = Movie.ratings
+    @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
     session[:sort_by] ||= 'title'
     session[:ratings] ||= @all_ratings

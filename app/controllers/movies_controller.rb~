@@ -6,13 +6,13 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-
+#Note: code condensing accomplished in major part with the help of Will Farmer
   def index
-    #Make SQL query to get al possible ratings
-    @all_ratings = Movie.ratings
+    #Make SQL query to get all possible ratings
+    @all_ratings = ['G', 'PG', 'PG-13', 'R']
     
-    session[:sort_by] ||= 'title' # session sorting hash
-    session[:ratings] ||= @all_ratings # session ratings hash
+    session[:sort_by] ||= 'title'
+    session[:ratings] ||= @all_ratings
     session[:sort_by] = (params[:sort].blank? ? session[:sort_by] : params[:sort]) # if sort_param is blank, sort by previous, else by param
     session[:ratings] = (params[:ratings].blank? ? session[:ratings] : params[:ratings].keys) # if filter is blank, filter by previous, else by param
     @movies = Movie.where(:rating => session[:ratings]).order("#{session[:sort_by]} ASC") # declare movies as Movie filtered by session and ordered by session
