@@ -7,12 +7,21 @@ class MoviesController < ApplicationController
   end
 
 def index
+    #Array of all possible ratings (for our class)
     @all_ratings = ['G','PG','PG-13', 'R']
     
-     session[:sort_by] ||= 'title' # session sorting hash
-    session[:ratings] ||= @all_ratings # session ratings hash
+    #NOTE TO SELF:
+    #In a = a || b, a is set to something by the statement on every run, whereas with a || a = b, 
+    #a is only set if a is logically false (i.e. if it's nil or false) because || is 'short circuiting'.
+    #That is, if the left hand side of the || comparison is true, there's no need to check the right hand side.
+
+    session[:sort_by] ||= 'title' #if item is selected the sort by that, else sort by title ("hilited" item)
+    session[:ratings] ||= @all_ratings #if checkboxes are selected sort by that, else sort by all ratings
+
     session[:sort_by] = (params[:sort].blank? ? session[:sort_by] : params[:sort]) # if sort_param is blank, sort by previous, else by param
     session[:ratings] = (params[:ratings].blank? ? session[:ratings] : params[:ratings].keys) # if filter is blank, filter by previous, else by param
+
+    #Get all movies where rating (sort by ratings item), order within ratings by (sort_by) from 0-9/a-z
     @movies = Movie.where(:rating => session[:ratings]).order("#{session[:sort_by]} ASC")
     
   end
