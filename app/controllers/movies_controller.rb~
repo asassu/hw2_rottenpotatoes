@@ -6,49 +6,17 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
+
   def index
-    @all_ratings = ['G','PG','PG-13', 'R']
+    #Make SQL query to get al possible ratings
+    @all_ratings = Movie.ratings
     
-    needToRedirect = false
-    
-    if params[:sort_by] == nil
-      if session[:sort_by] != nil
-        @sorted_field = session[:sort_by].to_s
-        needToRedirect = true 
-      end
-    else
-      @sorted_field = params[:sort_by].to_s
-    end
-    
-    if params[:ratings] == nil
-      if session[:ratings] != nil
-        @checked_ratings_hash = session[:ratings]
-        needToRedirect = true 
-      end
-    else
-      @checked_ratings_hash = params[:ratings]
-    end
-    
-    if @checked_ratings_hash != nil 
-      session.merge!({ :ratings => @checked_ratings_hash })
-    end
-    
-    if @sorted_field != nil
-      session.merge!({ :sort_by => @sorted_field })
-    end 
-    
-    if needToRedirect == true
-      newParams = Hash.new
-      newParams.merge!({ :ratings => @checked_ratings_hash })
-      newParams.merge!({ :sort_by => @sorted_field })
-      redirect_to movies_path(newParams)
-    end
-    
-    @checked_ratings = @checked_ratings_hash != nil ? @checked_ratings_hash.keys : []
-    @search_ratings = @checked_ratings.empty?() ? @all_ratings : @checked_ratings
-    @movies = Movie.find_all_by_rating(@search_ratings, :order => @sorted_field)
-    @highlight = @sorted_field
-    
+    session[:sort_by] ||= 'title' # session sorting hash
+    session[:ratings] ||= @all_ratings # session ratings hash
+    session[:sort_by] = (params[:sort].blank? ? session[:sort_by] : params[:sort]) # if sort_param is blank, sort by previous, else by param
+    session[:ratings] = (params[:ratings].blank? ? session[:ratings] : params[:ratings].keys) # if filter is blank, filter by previous, else by param
+    @movies = Movie.where(:rating => session[:ratings]).order("#{session[:sort_by]} ASC") # declare movies as Movie filtered by session and ordered by session
+
   end
 
   def new
