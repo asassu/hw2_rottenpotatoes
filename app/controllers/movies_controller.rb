@@ -8,7 +8,8 @@ class MoviesController < ApplicationController
 
 #Note: code condensing accomplished in major part with the help of Will Farmer
   def index
-    @all_ratings = ['G', 'PG', 'PG-13', 'R']
+    #Make SQL query to get all possible ratings
+    @all_ratings = Movie.ratings
     
     session[:sort_by] ||= 'title'
     session[:ratings] ||= @all_ratings
