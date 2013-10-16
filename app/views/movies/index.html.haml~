@@ -10,7 +10,8 @@
   = submit_tag 'Refresh Sort', :id => "ratings_submit"
 
   -#Note: params hash contains all the input sent in by the user
-  #It is the job of the controller to respond to these requests (dynamically calls onto page)
+  -#It is the job of the controller to respond to these requests (dynamically calls onto page)
+AHHHHH
 
 %table#movies
   %thead

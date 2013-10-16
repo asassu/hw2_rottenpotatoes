@@ -6,6 +6,7 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
+#Thanks to Will Farmer for helping to condense code
 def index
     #Array of all possible ratings (for our class)
     @all_ratings = ['G','PG','PG-13', 'R']
