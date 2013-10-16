@@ -37,7 +37,7 @@ def index
       session.merge!({ :sort_by => @sorted_field })
     end
     
-        if needToRedirect == true
+    if needToRedirect == true
       newParams = Hash.new
       newParams.merge!({ :ratings => @checked_ratings_hash })
       newParams.merge!({ :sort_by => @sorted_field })
