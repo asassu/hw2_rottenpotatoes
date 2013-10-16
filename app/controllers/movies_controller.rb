@@ -6,13 +6,20 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    @all_ratings = Movie.ratings.sort # Get all distinct ratings through sql query
-    session[:sort_by] ||= 'title' # session sorting hash
-    session[:ratings] ||= @all_ratings # session ratings hash
-    session[:sort_by] = (params[:sort].blank? ? session[:sort_by] : params[:sort]) # if sort_param is blank, sort by previous, else by param
-    session[:ratings] = (params[:ratings].blank? ? session[:ratings] : params[:ratings].keys) # if filter is blank, filter by previous, else by param
-    @movies = Movie.where(:rating => session[:ratings]).order("#{session[:sort_by]} ASC") # declare movies as Movie filtered by session and ordered by session
+#Thanks to Will Farmer for helping to condense code
+def index
+    #Array of all possible ratings (for our class)
+    @all_ratings = ['G','PG','PG-13', 'R']
+
+    #If sort_param is blank (nothing is "hilited"), use previous sorting method. Else use currently set sorting (param)
+    session[:sort_by] = (params[:sort].blank? ? session[:sort_by] : params[:sort])
+
+    #If sort_param is blank (nothing checked), repeast the last entry. Else use current set of checkboxes (param)
+    session[:ratings] = (params[:ratings].blank? ? session[:ratings] : params[:ratings].keys)
+
+    #Get all movies where rating (sort by ratings item), order within ratings by (sort_by) from 0-9/a-z
+    @movies = Movie.where(:rating => session[:ratings]).order("#{session[:sort_by]} ASC")
+    
   end
 
   def new
